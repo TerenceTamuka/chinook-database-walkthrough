@@ -44,12 +44,115 @@ egypt = FavouritePlaces(
      population="109 Million",
      famous_tourist_site="Pyramids of Giza"
 )
+brazil = FavouritePlaces(
+     country_name ="Brazil",
+     capital_city ="Rio de Janeiro",
+     population="217 Million",
+     famous_tourist_site=" UNESCO World Heritage site"
+)
+
+united_arab_emirates = FavouritePlaces(
+     country_name ="UAE",
+     capital_city ="Dubai",
+     population="10 Million",
+     famous_tourist_site="Burj Khalifa"
+)
+uganda = FavouritePlaces(
+     country_name ="Uganda",
+     capital_city ="Kampala",
+     population="42 Million",
+     famous_tourist_site="Kampala Museum"
+)
+
+zimbabwe = FavouritePlaces(
+     country_name ="Zimbabwe",
+     capital_city ="Harare",
+     population="16 Million",
+     famous_tourist_site="Victoria Falls"
+)
+
+guatemala = FavouritePlaces(
+     country_name ="Guatemala",
+     capital_city ="Guatemala City",
+     population="20 Million",
+     famous_tourist_site="Tika"
+)
+
+singapore = FavouritePlaces(
+     country_name ="Singapore",
+     capital_city ="Singapore",
+     population="6 Million",
+     famous_tourist_site="Marina Bay Sands"
+)
+
 
 #add each instance of our favourite places to our session
-session.add(egypt)
+#session.add(egypt)
+#session.add(brazil)
+#session.add(united_arab_emirates)
+#session.add(uganda)
+#session.add(zimbabwe)
+#session.add(guatemala)
+#session.add(singapore)
 
 # commit our session to the database
-session.commit()
+#session.commit()
+
+# updating a single favourite place record
+#favourite_place = session.query(FavouritePlaces).filter_by(id=9).first()
+#favourite_place.famous_tourist_site = "Infinity Pool"
+
+# commit our session to the database
+#session.commit()
+
+# updating multiple records to favourite places to capitalise every CAPITAL CITYcolumn
+capital_cities = session.query(FavouritePlaces).all()
+
+# loop over each capital city in the list and apply conditional logic to update the capital city column accordingly
+#for capital in capital_cities:
+    #Access the capital cities column
+    #capital_city_names = capital.capital_city
+
+    # convert the site name to uppercase
+    #capital_city_name_upper = capital_city_names.upper()
+
+    # Apply conditional logic based on the uppercase site name
+    # if capital_city_name_upper.startswith("CAIRO"):
+    #     capital.capital_city = "CAIRO"
+    # elif capital_city_name_upper.startswith("RIO DE JANEIRO"):
+    #     capital.capital_city = "RIO DE JANEIRO"
+    # elif capital_city_name_upper.startswith("DUBAI"):
+    #     capital.capital_city = "DUBAI"
+    # elif capital_city_name_upper.startswith("KAMPALA"):
+    #     capital.capital_city = "KAMPALA"
+    # elif capital_city_name_upper.startswith("HARARE"):
+    #     capital.capital_city = "HARARE"
+    # elif capital_city_name_upper.startswith("GUATEMALA CITY"):
+    #     capital.capital_city = "GUATEMALA CITY"
+    # elif capital_city_name_upper.startswith("SINGAPORE"):
+    #     capital.capital_city = "SINGAPORE"
+    # else:
+    #     print(f"Capital City: {capital_city_name_upper} - is not specifically categorized.")
+
+    # session.commit()
+
+# deleting a single record from the favourite place database
+countryName = input("Enter a country: ")
+capital_city_name = input("Enter the country's capital city: ")
+country_spec = session.query(FavouritePlaces).filter_by(country_name=countryName, capital_city=capital_city_name).first()
+# defensive programming
+if country_spec is not None:
+     print("Country Found: ", country_spec.country_name + " " + country_spec.capital_city)
+     confirmation = input("Are you sureyou want to delete this country record? (y/n) ")
+     if confirmation.lower() == "y":
+         session.delete(country_spec)
+         session.commit()
+         print("country deleted successfully")
+     else:
+         print("Country not deleted")
+else:
+     print("Country not found")
+
 
 # create a session to find all the favourite places
 favourite_places = session.query(FavouritePlaces)

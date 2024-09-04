@@ -1,12 +1,72 @@
 from sqlalchemy import (
-    create_engine, Table, Column, Integer, String
+    create_engine, Table, Column, Integer, String, Date, Float
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 
 # executing the instructions from the "chinook" database
 db = create_engine("postgresql:///chinook")
 base = declarative_base()
+
+#create a class-based model for the "Game Consoles" table
+class GameConsoles(base):
+    __tablename__ = 'GameConsoles'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    manufacturer = Column(String)
+    model = Column(String)
+    release_date = Column(Date, nullable=False)
+    price = Column(Float)
+
+
+# create a new instance of sessionmaker, then point to our engine (the db)
+Session = sessionmaker(db)
+#opens an actual session by calling the Session() subclass defined above
+session = Session()
+
+#creating the database using declarative_base subclass
+base.metadata.create_all(db)
+
+#creating records on the Game Consoles table
+
+playStation5 = GameConsoles(
+    name = "PlayStation 5",
+    manufacturer = "Sony",
+    model = "CFI-1015A",
+    release_date = "2020-11-12",
+    price = 499.99
+
+)
+
+Xbox = GameConsoles(
+    name = "Xbox Series X",
+    manufacturer = "Microsoft",
+    model = "RRT-00001",
+    release_date = "2020-11-10",
+    price = 499.99
+
+)
+#add each instance of our game consoles to our session
+session.add(playStation5)
+session.add(Xbox)
+
+# commit our session to the database
+session.commit()
+
+#query the database to find all game consoles
+consoles = session.query(GameConsoles)
+for console in consoles:
+     print(
+         console.id,
+         console.name,
+         console.manufacturer,
+         console.model,
+         console.release_date,
+         console.price,
+         sep=" | "
+     )
+
 
 #create a class-basedd model for the "Programmer" table
 # class Programmer(base):
@@ -19,71 +79,71 @@ base = declarative_base()
 #     famous_for = Column(String)
 
 #create a class-based model for the "Your Favourite Places" table
-class FavouritePlaces(base):
-     __tablename__ = "FavouritePlaces"
-     id = Column(Integer, primary_key=True)
-     country_name = Column(String)
-     capital_city = Column(String)
-     population = Column(String)
-     famous_tourist_site = Column(String)
+# class FavouritePlaces(base):
+#      __tablename__ = "FavouritePlaces"
+#      id = Column(Integer, primary_key=True)
+#      country_name = Column(String)
+#      capital_city = Column(String)
+#      population = Column(String)
+#      famous_tourist_site = Column(String)
 
 # Instead of connecting to the database directly, we will ask for a session
 # create a new instance of sessionmaker, then point to our engine (the db)
-Session = sessionmaker(db)
+#Session = sessionmaker(db)
 #opens an actual session by calling the Session() subclass defined above
-session = Session()
+#session = Session()
 
 #creating the database using declarative_base subclass
-base.metadata.create_all(db)
+#base.metadata.create_all(db)
 
 
 #creating records on the Your Favourite Places table
-egypt = FavouritePlaces(
-     country_name ="Egypt",
-     capital_city ="Cairo",
-     population="109 Million",
-     famous_tourist_site="Pyramids of Giza"
-)
-brazil = FavouritePlaces(
-     country_name ="Brazil",
-     capital_city ="Rio de Janeiro",
-     population="217 Million",
-     famous_tourist_site=" UNESCO World Heritage site"
-)
+# egypt = FavouritePlaces(
+#      country_name ="Egypt",
+#      capital_city ="Cairo",
+#      population="109 Million",
+#      famous_tourist_site="Pyramids of Giza"
+# )
+# brazil = FavouritePlaces(
+#      country_name ="Brazil",
+#      capital_city ="Rio de Janeiro",
+#      population="217 Million",
+#      famous_tourist_site=" UNESCO World Heritage site"
+# )
 
-united_arab_emirates = FavouritePlaces(
-     country_name ="UAE",
-     capital_city ="Dubai",
-     population="10 Million",
-     famous_tourist_site="Burj Khalifa"
-)
-uganda = FavouritePlaces(
-     country_name ="Uganda",
-     capital_city ="Kampala",
-     population="42 Million",
-     famous_tourist_site="Kampala Museum"
-)
+# united_arab_emirates = FavouritePlaces(
+#      country_name ="UAE",
+#      capital_city ="Dubai",
+#      population="10 Million",
+#      famous_tourist_site="Burj Khalifa"
+# )
+# uganda = FavouritePlaces(
+#      country_name ="Uganda",
+#      capital_city ="Kampala",
+#      population="42 Million",
+#      famous_tourist_site="Kampala Museum"
+# )
 
-zimbabwe = FavouritePlaces(
-     country_name ="Zimbabwe",
-     capital_city ="Harare",
-     population="16 Million",
-     famous_tourist_site="Victoria Falls"
-)
+# zimbabwe = FavouritePlaces(
+#      country_name ="Zimbabwe",
+#      capital_city ="Harare",
+#      population="16 Million",
+#      famous_tourist_site="Victoria Falls"
+# )
 
-guatemala = FavouritePlaces(
-     country_name ="Guatemala",
-     capital_city ="Guatemala City",
-     population="20 Million",
-     famous_tourist_site="Tika"
-)
+# guatemala = FavouritePlaces(
+#      country_name ="Guatemala",
+#      capital_city ="Guatemala City",
+#      population="20 Million",
+#      famous_tourist_site="Tika"
+# )
 
-singapore = FavouritePlaces(
-     country_name ="Singapore",
-     capital_city ="Singapore",
-     population="6 Million",
-     famous_tourist_site="Marina Bay Sands"
-)
+# singapore = FavouritePlaces(
+#      country_name ="Singapore",
+#      capital_city ="Singapore",
+#      population="6 Million",
+#      famous_tourist_site="Marina Bay Sands"
+# )
 
 
 #add each instance of our favourite places to our session
@@ -106,7 +166,7 @@ singapore = FavouritePlaces(
 #session.commit()
 
 # updating multiple records to favourite places to capitalise every CAPITAL CITYcolumn
-capital_cities = session.query(FavouritePlaces).all()
+# capital_cities = session.query(FavouritePlaces).all()
 
 # loop over each capital city in the list and apply conditional logic to update the capital city column accordingly
 #for capital in capital_cities:
@@ -137,34 +197,34 @@ capital_cities = session.query(FavouritePlaces).all()
     # session.commit()
 
 # deleting a single record from the favourite place database
-countryName = input("Enter a country: ")
-capital_city_name = input("Enter the country's capital city: ")
-country_spec = session.query(FavouritePlaces).filter_by(country_name=countryName, capital_city=capital_city_name).first()
+# countryName = input("Enter a country name: ")
+# capital_city_name = input("Enter the country's capital city name: ")
+# country_spec = session.query(FavouritePlaces).filter_by(country_name=countryName, capital_city=capital_city_name).first()
 # defensive programming
-if country_spec is not None:
-     print("Country Found: ", country_spec.country_name + " " + country_spec.capital_city)
-     confirmation = input("Are you sureyou want to delete this country record? (y/n) ")
-     if confirmation.lower() == "y":
-         session.delete(country_spec)
-         session.commit()
-         print("country deleted successfully")
-     else:
-         print("Country not deleted")
-else:
-     print("Country not found")
+# if country_spec is not None:
+#      print("Country Found: ", country_spec.country_name + " " + country_spec.capital_city)
+#      confirmation = input("Are you sure you want to delete this country's record? (y/n) ")
+#      if confirmation.lower() == "y":
+#          session.delete(country_spec)
+#          session.commit()
+#          print("country deleted successfully")
+#      else:
+#          print("Country not deleted")
+# else:
+#      print("Country not found")
 
 
 # create a session to find all the favourite places
-favourite_places = session.query(FavouritePlaces)
-for favourite_place in favourite_places:
-    print(
-        favourite_place.id,
-        favourite_place.country_name,
-        favourite_place.capital_city,
-        favourite_place.population,
-        favourite_place.famous_tourist_site,
-        sep=" | "
-    )
+# favourite_places = session.query(FavouritePlaces)
+# for favourite_place in favourite_places:
+#     print(
+#         favourite_place.id,
+#         favourite_place.country_name,
+#         favourite_place.capital_city,
+#         favourite_place.population,
+#         favourite_place.famous_tourist_site,
+#         sep=" | "
+#     )
 
 #creating records on our Programmer table
 # ada_lovelace = Programmer(

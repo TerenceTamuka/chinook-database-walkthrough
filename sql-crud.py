@@ -47,12 +47,87 @@ Xbox = GameConsoles(
     price = 499.99
 
 )
+
+segaGenesis = GameConsoles(
+    name = "Sega Genesis",
+    manufacturer = "Sega",
+    model = "MK-1601",
+    release_date = "1989-08-14",
+    price = 189.99
+
+)
+
+atari_2600 = GameConsoles(
+    name = "Atari 2600",
+    manufacturer = "Atari",
+    model = "CX2600",
+    release_date = "1977-09-11",
+    price = 189.99
+
+)
+
+nintendo_switch = GameConsoles(
+    name = "Nintendo Switch",
+    manufacturer = "Nintendo",
+    model = "HAC-001(-01)",
+    release_date = "2017-03-03",
+    price = 299.99
+
+)
+
+gamecube = GameConsoles(
+    name = "Nintendo GameCube",
+    manufacturer = "Nintendo",
+    model = "DOL-001",
+    release_date = "2001-09-14",  # Japan release date
+    price = 199.99
+)
+
+nintendo_wii = GameConsoles(
+    name = "Nintendo Wii",
+    manufacturer = "Nintendo",
+    model = "RVL-001",
+    release_date = "2006-11-19",  # North America release date
+    price = 249.99
+)
+
+
 #add each instance of our game consoles to our session
-session.add(playStation5)
-session.add(Xbox)
+#session.add(playStation5)
+#session.add(Xbox)
+#session.add(segaGenesis)
+#session.add(atari_2600)
+#session.add(nintendo_switch)
+#session.add(gamecube)
 
 # commit our session to the database
-session.commit()
+#session.commit()
+
+# updating a single game consoles,Xbox price record
+#XboxPrice = session.query(GameConsoles).filter_by(id=2).first()
+#XboxPrice.price = 399.99
+
+# commit our session to the database
+#session.commit()
+
+# deleting a single record from the game consoles table database
+consoleName = input("Please enter a Game Console name: ")
+consoleManufacturer = input("Please enter its manufacturer: ")
+console_spec = session.query(GameConsoles).filter_by(name=consoleName, manufacturer=consoleManufacturer).first()
+# defensive programming
+if console_spec is not None:
+    print("Game Console Found: ", console_spec.name + " " + console_spec.manufacturer)
+    confirmation = input("Are you sure you want to delete this console's record? (y/n) ")
+    if confirmation.lower() == "y":
+        session.delete(console_spec)
+        session.commit()
+        print("Console deleted successfully")
+    else:
+        print("Console not deleted")
+else:
+    print("Console not found")
+
+
 
 #query the database to find all game consoles
 consoles = session.query(GameConsoles)
